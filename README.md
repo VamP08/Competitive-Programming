@@ -18,6 +18,7 @@ This repository is more than just a collection of solutions; it's a structured l
 ## 🗺️ Repository Structure
 
 The repository is organized by topic into a clear, hierarchical structure to make finding information intuitive.
+```
 /
 ├── 01-Introduction/
 │   ├── 01-Big-O-Notation/
@@ -70,7 +71,7 @@ The repository is organized by topic into a clear, hierarchical structure to mak
 ├── templates/
 │   ├── template.cpp
 └── README.md
-
+```
 ---
 
 ## 🤝 Contributing
