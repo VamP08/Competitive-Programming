@@ -25,45 +25,67 @@ With these optimizations, the time complexity for M operations on N elements is 
 
 ### **Implementation Template (Union by Size & Path Compression)**
 
-C++
+```
+#include <iostream>
+#include <vector>
+#include <numeric> // For std::iota
+#include <algorithm> // For std::swap
 
-\#**include** \<iostream\>  
-\#**include** \<vector\>  
-\#**include** \<numeric\>
+class DSU {
+private:
+    std::vector<int> parent;
+    std::vector<int> sz; // Used for Union by Size optimization
 
-class DSU {  
-private:  
-    std::vector\<int\> parent;  
-    std::vector\<int\> sz; // Using size for union by size
-
-public:  
-    DSU(int n) {  
-        parent.resize(n);  
-        std::iota(parent.begin(), parent.end(), 0); // Each node is its own parent initially  
-        sz.assign(n, 1); // Each component has size 1 initially  
+public:
+    /**
+     * @brief Constructor for the DSU structure.
+     * @param n The number of elements (0 to n-1).
+     */
+    DSU(int n) {
+        parent.resize(n);
+        // Initialize: Each node is its own parent (representing a set of size 1).
+        std::iota(parent.begin(), parent.end(), 0);
+        sz.assign(n, 1);
     }
 
-    int find(int i) {  
-        if (parent\[i\] \== i) {  
-            return i;  
-        }  
-        // Path compression  
-        return parent\[i\] \= find(parent\[i\]);  
+    /**
+     * @brief Finds the representative (root) of the set containing element i.
+     * Uses Path Compression optimization.
+     * @param i The element whose set root is to be found.
+     * @return The root of the set containing i.
+     */
+    int find(int i) {
+        if (parent[i] == i) {
+            return i;
+        }
+        // Path compression: set parent[i] directly to the root
+        return parent[i] = find(parent[i]);
     }
 
-    void unite(int i, int j) {  
-        int root\_i \= find(i);  
-        int root\_j \= find(j);  
-        if (root\_i\!= root\_j) {  
-            // Union by size  
-            if (sz\[root\_i\] \< sz\[root\_j\]) {  
-                std::swap(root\_i, root\_j);  
-            }  
-            parent\[root\_j\] \= root\_i;  
-            sz\[root\_i\] \+= sz\[root\_j\];  
-        }  
-    }  
+    /**
+     * @brief Merges the sets containing elements i and j.
+     * Uses Union by Size optimization.
+     * @param i An element in the first set.
+     * @param j An element in the second set.
+     */
+    void unite(int i, int j) {
+        int root_i = find(i);
+        int root_j = find(j);
+
+        if (root_i != root_j) {
+            // Union by Size: Attach the smaller tree to the root of the larger tree
+            if (sz[root_i] < sz[root_j]) {
+                std::swap(root_i, root_j);
+            }
+            
+            // Make root_i the parent of root_j
+            parent[root_j] = root_i;
+            // Update the size of the new combined set
+            sz[root_i] += sz[root_j];
+        }
+    }
 };
+```
 
 ### **Real-World Applications**
 
