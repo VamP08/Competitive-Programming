@@ -1,23 +1,21 @@
 # Competitive Programming & DSA Journey
 
-A comprehensive repository containing structured guides, implementation templates, and curated practice problems for a wide range of Data Structures and Algorithms. This project is my personal knowledge base for mastering DSA for competitive programming and technical interviews.
+A comprehensive repository containing structured guides, implementation templates, and curated practice problems for a wide range of Data Structures and Algorithms. This project is my personal knowledge base for learning DSA for competitive programming and technical interviews. I have implemented the solution for the problem publicly in this repository so that everyone can use this as a template for leaning DSA implementing their own solution and organize their learning.
 
 ---
 
-## 🚀 About This Repository
+## About This Repository
 
-This repository is more than just a collection of solutions; it's a structured learning environment. Each topic is organized into its own directory containing a detailed `README.md` file that acts as a revision guide. These guides include:
+This repository is a structured learning environment. Each topic is organized into its own directory containing a detailed `README.md` file that acts as a revision guide. These guides include:
 
 * **Conceptual Overviews:** Brief but thorough explanations of core concepts.
-* **Implementation Templates:** Clean, well-commented C++ code for key algorithms.
+* **Implementation Templates:** Clean, well-commented C++ code for key algorithms.(Add as per learning)
 * **Complexity Analysis:** Time and space complexity for major operations.
 * **Curated Practice Problems:** A handpicked list of problems from platforms like LeetCode, Codeforces, and CSES to solidify understanding.
 
 ---
 
-## 🗺️ Repository Structure
-
-The repository is organized by topic into a clear, hierarchical structure to make finding information intuitive.
+## Repository Structure
 ```
 /
 ├── 01-Introduction/
@@ -74,15 +72,15 @@ The repository is organized by topic into a clear, hierarchical structure to mak
 ```
 ---
 
-## 🤝 Contributing
+## Contributing
 
 While this is a personal repository, suggestions and contributions are welcome. If you find an error, have a suggestion for a better explanation, or want to recommend a good problem, feel free to open an issue or submit a pull request.=
 
 ---
 
-## 📚 External Resources
+## External Resources
 
-Here are some of the fantastic resources used to compile the information in this repository:
+Here are few resources used to compile the information in this repository:
 
 * [**CP-Algorithms**](https://cp-algorithms.com/): An excellent and comprehensive resource for algorithms.
 * [**CSES Problem Set**](https://cses.fi/problemset/): A curated collection of high-quality competitive programming problems.
