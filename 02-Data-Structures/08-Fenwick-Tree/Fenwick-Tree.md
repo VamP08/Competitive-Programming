@@ -23,46 +23,69 @@ The core idea is that each index in the BIT stores the sum of a specific, non-co
 
 ### **Implementation Template (Prefix Sum with Point Updates)**
 
-C++
+```#include <iostream>
+#include <vector>
 
-\#**include** \<iostream\>  
-\#**include** \<vector\>
-
-class FenwickTree {  
-private:  
-    std::vector\<long long\> bit;  
+class FenwickTree {
+private:
+    // Binary Indexed Tree array, 1-indexed for implementation ease
+    std::vector<long long> bit;
+    // Size of the original array (0-indexed size, used for boundary check)
     int n;
 
-public:  
-    FenwickTree(int size) {  
-        n \= size;  
-        bit.assign(n \+ 1, 0);  
+public:
+    /**
+     * @brief Initializes a Fenwick Tree for an array of a given size.
+     */
+    FenwickTree(int size) {
+        n = size;
+        // The BIT array is 1-indexed, so it needs size n + 1
+        bit.assign(n + 1, 0);
     }
 
-    void update(int idx, int delta) {  
-        idx++; // 1-based index  
-        while (idx \<= n) {  
-            bit\[idx\] \+= delta;  
-            idx \+= idx & \-idx; // Move to the next relevant index  
-        }  
+    /**
+     * @brief Adds a delta value to the element at index idx (0-based).
+     * @param idx The 0-based index to update.
+     * @param delta The value to add to the element.
+     */
+    void update(int idx, int delta) {
+        idx++; // Convert to 1-based index
+        while (idx <= n) {
+            bit[idx] += delta;
+            // Move to the next relevant index (parent in the implicit tree)
+            idx += idx & -idx;
+        }
     }
 
-    long long query(int idx) {  
-        idx++; // 1-based index  
-        long long sum \= 0;  
-        while (idx \> 0) {  
-            sum \+= bit\[idx\];  
-            idx \-= idx & \-idx; // Move to the parent index  
-        }  
-        return sum;  
+    /**
+     * @brief Queries the prefix sum from index 0 up to idx (inclusive, 0-based).
+     * @param idx The 0-based index for the upper bound of the prefix sum.
+     * @return The prefix sum sum(arr[0]...arr[idx]).
+     */
+    long long query(int idx) {
+        idx++; // Convert to 1-based index
+        long long sum = 0;
+        while (idx > 0) {
+            sum += bit[idx];
+            // Move to the parent index (by removing the rightmost set bit)
+            idx -= idx & -idx;
+        }
+        return sum;
     }
 
-    long long range\_query(int l, int r) {  
-        if (l \> r) return 0;  
-        return query(r) \- query(l \- 1);  
-    }  
+    /**
+     * @brief Queries the sum of the elements in the range [l, r] (inclusive, 0-based).
+     * @param l The 0-based starting index.
+     * @param r The 0-based ending index.
+     * @return The range sum sum(arr[l]...arr[r]).
+     */
+    long long range_query(int l, int r) {
+        if (l > r) return 0;
+        // Range sum is calculated as PrefixSum(r) - PrefixSum(l-1)
+        return query(r) - query(l - 1);
+    }
 };
-
+```
 ### **Advanced Variants**
 
 * **Range Updates and Point Queries:** A Fenwick Tree can be adapted to handle range updates by updating two indices for each range.  
