@@ -17,68 +17,96 @@ A **Segment Tree** is a versatile, binary tree-based data structure that stores 
 
 ### **Implementation Template (Range Sum with Point Updates)**
 
-C++
+```#include <iostream>
+#include <vector>
+#include <numeric>
 
-\#**include** \<iostream\>  
-\#**include** \<vector\>  
-\#**include** \<numeric\>
-
-class SegmentTree {  
-private:  
-    std::vector\<long long\> tree;  
-    std::vector\<int\> arr;  
+class SegmentTree {
+private:
+    std::vector<long long> tree;
+    std::vector<int> arr;
     int n;
 
-    void build(int node, int start, int end) {  
-        if (start \== end) {  
-            tree\[node\] \= arr\[start\];  
-            return;  
-        }  
-        int mid \= start \+ (end \- start) / 2;  
-        build(2 \* node, start, mid);  
-        build(2 \* node \+ 1, mid \+ 1, end);  
-        tree\[node\] \= tree\[2 \* node\] \+ tree\[2 \* node \+ 1\];  
+    /**
+     * @brief Recursively builds the Segment Tree.
+     */
+    void build(int node, int start, int end) {
+        if (start == end) {
+            tree[node] = arr[start];
+            return;
+        }
+        int mid = start + (end - start) / 2;
+        build(2 * node, start, mid);
+        build(2 * node + 1, mid + 1, end);
+        // Operation: Sum
+        tree[node] = tree[2 * node] + tree[2 * node + 1];
     }
 
-public:  
-    SegmentTree(const std::vector\<int\>& inputArray) {  
-        arr \= inputArray;  
-        n \= arr.size();  
-        tree.resize(4 \* n);  
-        build(1, 0, n \- 1);  
+public:
+    /**
+     * @brief Constructs the Segment Tree.
+     */
+    SegmentTree(const std::vector<int>& inputArray) {
+        arr = inputArray;
+        n = arr.size();
+        // The tree array size is typically 4*N to safely accommodate all nodes.
+        tree.resize(4 * n);
+        build(1, 0, n - 1);
     }
 
-    void update(int node, int start, int end, int idx, int val) {  
-        if (start \== end) {  
-            arr\[idx\] \= val;  
-            tree\[node\] \= val;  
-            return;  
-        }  
-        int mid \= start \+ (end \- start) / 2;  
-        if (start \<= idx && idx \<= mid) {  
-            update(2 \* node, start, mid, idx, val);  
-        } else {  
-            update(2 \* node \+ 1, mid \+ 1, end, idx, val);  
-        }  
-        tree\[node\] \= tree\[2 \* node\] \+ tree\[2 \* node \+ 1\];  
+    /**
+     * @brief Updates the value at a specific index in the array and tree.
+     */
+    void update(int node, int start, int end, int idx, int val) {
+        if (start == end) {
+            arr[idx] = val;
+            tree[node] = val;
+            return;
+        }
+        int mid = start + (end - start) / 2;
+        if (start <= idx && idx <= mid) {
+            update(2 * node, start, mid, idx, val);
+        } else {
+            update(2 * node + 1, mid + 1, end, idx, val);
+        }
+        // Recalculate the sum for the current node
+        tree[node] = tree[2 * node] + tree[2 * node + 1];
     }
 
-    long long query(int node, int start, int end, int l, int r) {  
-        if (r \< start |
+    /**
+     * @brief Queries the sum in the range [l, r].
+     */
+    long long query(int node, int start, int end, int l, int r) {
+        // Range represented by node is completely outside the given range [l, r]
+        if (r < start || end < l) {
+            return 0; // Return identity element for sum (0)
+        }
+        // Range represented by node is completely inside the given range [l, r]
+        if (l <= start && end <= r) {
+            return tree[node];
+        }
+        // Range represented by node is partially inside
+        int mid = start + (end - start) / 2;
+        long long p1 = query(2 * node, start, mid, l, r);
+        long long p2 = query(2 * node + 1, mid + 1, end, l, r);
+        return p1 + p2;
+    }
+    
+    /**
+     * @brief Public helper to call update starting from the root (node 1).
+     */
+    void update(int idx, int val) {
+        update(1, 0, n - 1, idx, val);
+    }
 
-| end \< l) {  
-            return 0; // No overlap  
-        }  
-        if (l \<= start && end \<= r) {  
-            return tree\[node\]; // Total overlap  
-        }  
-        int mid \= start \+ (end \- start) / 2;  
-        long long p1 \= query(2 \* node, start, mid, l, r);  
-        long long p2 \= query(2 \* node \+ 1, mid \+ 1, end, l, r);  
-        return p1 \+ p2; // Partial overlap  
-    }  
+    /**
+     * @brief Public helper to call query starting from the root (node 1).
+     */
+    long long query(int l, int r) {
+        return query(1, 0, n - 1, l, r);
+    }
 };
-
+```
 ### **Advanced Variants**
 
 * **Lazy Propagation:** A powerful optimization that allows for efficient **range updates** (e.g., add a value X to all elements in a range \`\`) in O(logN) time. Updates are "lazily" propagated down the tree only when necessary. \[2\]  
